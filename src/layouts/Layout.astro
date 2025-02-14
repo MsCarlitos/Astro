@@ -1,14 +1,35 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+import { siteInfo } from "src/const/site-info.const";
+interface Props {
+	title?: string;
+	image?: string;
+	description?: string
+}
+const { title = siteInfo.title, description = siteInfo.description, image } =  Astro.props;
+---
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="widt h=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<!-- SEO -->
+		<meta name="description" content={description}>
+		<meta name="name" content="Carlos Mendoza">
+		<!-- OG Metatags -->
+		<meta property="og:title" content={title}>
+		<meta property="og:description" content={description}>
+		<meta property="og:image" content={image}>
+		<title>{ title }</title>
+		<ClientRouter />
 	</head>
-	<body>
-		<slot />
+	<body class="bg-slate-800 text-slate-100 m-auto max-w-3xl">
+		<main class="mt-10 ">
+			<slot />
+		</main>
 	</body>
 </html>
 
