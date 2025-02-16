@@ -3,6 +3,8 @@ import type { GetStaticPaths } from "astro";
 import Layout from "../../layouts/Layout.astro";
 import PokemoCard from "../../components/pokemons/PokemoCard.astro";
 import type { PokemonListResponse } from "../../interfaces/pokemon-list.interface";
+import Title from "@components/shared/Title.astro";
+import { Icon } from 'astro-icon/components'
 
 export const getStaticPaths = (async () => {
   const resp = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
@@ -34,11 +36,17 @@ const audioSrcLegacy = `https://raw.githubusercontent.com/PokeAPI/cries/main/cri
 const audioSrcLatest = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
 ---
 
-<Layout title={`Pokemon -# ${id} ${name}`} description={`Informaación sobre el pokemon ${name}`} image={imageSrc} >
+<Layout title={`Pokemon -# ${id} ${name}`} description={`Información sobre el pokemon ${name}`} image={imageSrc} >
   <section class="mt-10 mx-10 flex flex-col justify-center items-center">
-    <div>
-      <a href="/">Regresar</a>
-      <h1 class="text-3xl capitalize">{name}</h1>
+    <div class="flex flex-row">
+      <div>
+        <button onclick="window.history.back()" class="text-blue-500 ">Regresar</button>
+        <Title>{name}</Title>
+      </div>
+      <button id="btn-favorite" class="ml-4" data-name={name} data-id={id}>
+        <Icon data-outline class="hidden" name="heart-full" color="red" size={50}/>
+        <Icon data-full name="heart-outline" color="red" size={50}/>
+      </button>
     </div>
     <PokemoCard name={name} url={url} isBig />
 
@@ -53,3 +61,69 @@ const audioSrcLatest = `https://raw.githubusercontent.com/PokeAPI/cries/main/cri
     </audio>
   </section>
 </Layout>
+
+<script>
+  import type { FavoritePokemon } from "src/interfaces/favorites-pokemons.interface";
+
+  // Lifecycle in Astro
+  // document.addEventListener('astro:before-preparation', () => {
+  //   console.log('astro:before-preparation');
+  // })
+
+  // document.addEventListener('astro:after-preparation', () => {
+  //   console.log('astro:after-preparation');
+  // })
+
+  // document.addEventListener('astro:before-swap', () => {
+  //   console.log('astro:before-swap');
+  // })
+
+  // document.addEventListener('astro:before-swal', () => {
+  //   console.log('astro:before-swal');
+  // })
+
+  // document.addEventListener('astro:page-load', () => {
+  //   console.log('astro:before-swal');
+  // })
+
+  const handlePageLoad = () => {
+    let favoritePokemon: FavoritePokemon[] = JSON.parse(localStorage.getItem('favorites') ?? '[]');
+
+    const btnFavorite = document.querySelector('#btn-favorite') as HTMLElement;
+    if (!btnFavorite) return;
+    const name = btnFavorite.dataset.name ?? '';
+    const id = btnFavorite.dataset.id ?? '';
+    const isFavorite = favoritePokemon.some(fav => fav.name === name);
+
+    const heartOutline = btnFavorite.querySelector('[data-outline]') as HTMLElement;
+    const heartFull = btnFavorite.querySelector('[data-full]') as HTMLElement;
+
+    if(isFavorite) {
+      heartOutline.classList.add('hidden');
+      heartFull.classList.remove('hidden');
+    }
+
+    const toggleFavorite = () => {
+      const isFavorite = favoritePokemon.some(fav => fav.name === name);
+      if(isFavorite) {
+        favoritePokemon.filter(fav => fav.name !== name);
+      } else {
+        favoritePokemon.push({
+          id: +id,
+          name: name,
+        });
+      }
+      localStorage.setItem('favorites', JSON.stringify(favoritePokemon));
+    }
+
+    btnFavorite.addEventListener('click', () => {
+      heartOutline.classList.toggle('hidden');
+      heartFull.classList.toggle('hidden');
+      toggleFavorite();
+    })
+  }
+
+  document.addEventListener('astro:page-load',handlePageLoad)
+
+
+</script>

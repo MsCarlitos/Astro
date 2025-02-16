@@ -11,6 +11,7 @@ import type { PokemonListResponse } from "../../interfaces/pokemon-list.interfac
 
 // Path Alias
 import PokemoCard from "@components/pokemons/PokemoCard.astro";
+import Title from "@components/shared/Title.astro";
 
 export const getStaticPaths = (async () => {
     const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
@@ -37,8 +38,8 @@ const audioSrcLatest = `https://raw.githubusercontent.com/PokeAPI/cries/main/cri
 <Layout title={`Pokemon -# ${id} ${name}`} description={`Informaación sobre el pokemon ${name}`} image={imageSrc}>
     <section class="mt-10 mx-10 flex flex-col justify-center items-center">
         <div>
-            <a href="/">Regresar</a>
-            <h1 class="text-3xl capitalize">{name}</h1>
+            <button onclick="window.history.back()" class="text-blue-500 ">Regresar</button>
+            <Title>{name}</Title>
         </div>
         <PokemoCard name={name} url={url} isBig />
 

@@ -1,0 +1,21 @@
+---
+import { Counter } from "@components/Counter";
+import Title from "@components/shared/Title.astro";
+import Layout from "src/layouts/Layout.astro";
+
+const counterValue = 11;
+---
+
+<Layout title="Islas">
+    <Title>Islas</Title>
+
+    <video controls="" autoplay="" transition:persist>
+        <source src="https://ia804502.us.archive.org/33/items/GoldenGa1939_3/GoldenGa1939_3_512kb.mp4" type="video/mp4">
+    </video>
+
+    <div style={{height: '200px', backgroundColor: 'red', opacity: .4}}></div>
+    </div>
+    <Counter transition:persist="counter" transition:persist-props client:visible initValue={counterValue}>
+        <Title>Counter</Title>
+    </Counter>
+</Layout>

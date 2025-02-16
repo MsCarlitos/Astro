@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import { siteInfo } from "src/const/site-info.const";
+import Navbar from '../components/shared/Navbar.astro'
 interface Props {
 	title?: string;
 	image?: string;
@@ -13,7 +14,7 @@ const { title = siteInfo.title, description = siteInfo.description, image } =  A
 <html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="widt h=device-width" />
+		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<!-- SEO -->
@@ -26,8 +27,9 @@ const { title = siteInfo.title, description = siteInfo.description, image } =  A
 		<title>{ title }</title>
 		<ClientRouter />
 	</head>
-	<body class="bg-slate-800 text-slate-100 m-auto max-w-3xl">
-		<main class="mt-10 ">
+	<body class="bg-slate-800 text-slate-100 flex flex-col min-h-screen">
+		<Navbar />
+		<main class="mt-10 mx-auto flex-grow w-full max-w-4xl px-4">
 			<slot />
 		</main>
 	</body>
